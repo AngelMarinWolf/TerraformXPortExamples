@@ -52,6 +52,11 @@ data "aws_ami" "ubuntu" {
 # Searching for Default Security Group
 #######################################
 data "aws_security_groups" "default" {
+  /*
+  The next filter will search for all the security groups
+  that match wiht the word "default" and will create an
+  object wiht the data of them.
+  */
   filter {
     name   = "group-name"
     values = ["*default*"]
@@ -63,6 +68,11 @@ data "aws_security_groups" "default" {
 ############################
 resource "aws_key_pair" "public_key" {
   key_name   = "terraform-example"
+  /*
+  the keyword "file" allows import any kind of file into the
+  terraform script, in this case is importing the public key
+  that will be registered on AWS as a Key pair.
+  */
   public_key = "${file("./templates/keys/terraform-example.pub")}"
 }
 
@@ -79,6 +89,10 @@ resource "aws_instance" "instance" {
 
   associate_public_ip_address = true
 
+  /*
+  inside of this bloc you can add as much tags as you want and be applied
+  to the instance. Almost the resourses blocks allows allocate tags.
+  */
   tags {
     Name = "Terraform Instance"
     Environment = "Development"
